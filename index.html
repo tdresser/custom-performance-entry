@@ -1,56 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="performance_timeline_emit.js"></script>
-<script src="styleupdate_timing.js"></script>
-<script src="frame_timing.js"></script>
-<script src="event_timing.js"></script>
-<script src="input_latency_monitor.js"></script>
-<script src="performance_observer_tracing.js"></script>
+<script src="queue_entry.js"></script>
 <script>
-window.addEventListener("load", function() {
-  document.addEventListener("click", function() {
-    let now = performance.now();
 
-    performance.mark("ClickAStart");
-    while (performance.now() < now + 500){}
-    performance.mark("ClickAEndBStart");
-    now = performance.now();
-    while (performance.now() < now + 500){}
-    performance.mark("ClickBEnd");
-    performance.measure("ClickA", "ClickAStart", "ClickAEndBStart");
-    performance.measure("ClickB", "ClickAEndBStart", "ClickBEnd");
-  });
-
-  document.addEventListener("mousemove", () => {});
-});
-
-function fetchResource() {
-  function dummy() {
+let observer = new PerformanceObserver((entries) => {
+  for (const entry of entries.getEntries()) {
+    console.log(entry);
   }
+});
+observer.observe({entryTypes: ["custom", "mark"]});
 
-  var oReq = new XMLHttpRequest();
-  oReq.open('get', 'https://thecatapi.com/api/images/get?format=src&type=gif', true);
-  oReq.send();
-}
+performance.mark("test");
+performance.queueEntry("foo", 10, 12, {customDataA: 5, customDataB: "test"});
 
 </script>
-<style>
-#box {
-  width:50px;
-  height:50px;
-  background-color:blue;
-}
-
-#box:hover {
-  background-color:red;
-}
-
-</style>
 </head>
 <body>
-<div id="box" report-styleupdate></div>
-<div class="button"> <a href="#" onclick="fetchResource()">Fetch Resource</a> </div>
-<div class="button"> <a href="#" onclick="downloadTrace()">Download Trace</a> </div>
 </body>
 </html>
