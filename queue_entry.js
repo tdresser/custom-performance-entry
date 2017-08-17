@@ -33,14 +33,14 @@
   }
   PerformanceObserver.prototype = originalProto;
 
-  performance.queueEntry = function(name, startTime, duration, data) {
+  performance.queueEntry = function(performanceEntryInit) {
     const performanceEntry = {};
     performanceEntry.prototype = PerformanceEntry;
     performanceEntry.entryType = "custom";
-    performanceEntry.name = name;
-    performanceEntry.startTime = startTime;
-    performanceEntry.duration = duration;
-    performanceEntry.data = data;
+    performanceEntry.name = performanceEntryInit.name;
+    performanceEntry.startTime = performanceEntryInit.startTime;
+    performanceEntry.duration = performanceEntryInit.duration;
+    performanceEntry.detail = performanceEntryInit.detail;
 
     for (const observer of customObservers) {
       const listener = observerListeners.get(observer);

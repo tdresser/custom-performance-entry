@@ -12,7 +12,12 @@ let observer = new PerformanceObserver((entries) => {
 observer.observe({entryTypes: ["custom", "mark"]});
 
 performance.mark("test");
-performance.queueEntry("foo", 10, 12, {customDataA: 5, customDataB: "test"});
+performance.queueEntry({
+  name:"foo",
+  startTime: 10,
+  duration: 12,
+  detail: {customDataA: 5, customDataB: "test"}
+});
 
 </script>
 </head>
